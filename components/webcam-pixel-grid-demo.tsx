@@ -8,7 +8,7 @@ const DEFAULT_SETTINGS: GridSettings = {
   maxElevation: 80,
   motionSensitivity: 0.8,
   elevationSmoothing: 0.1,
-  gapRatio: 0.05,
+  gapRatio: 0.1,
   borderColor: "#008B8B",
   borderOpacity: 0.5,
   bloomIntensity: 0.6,
@@ -23,8 +23,8 @@ export default function WebcamPixelGridDemo() {
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid
-          gridCols={32}
-          gridRows={20}
+          gridCols={16}
+          gridRows={9}
           maxElevation={settings.maxElevation}
           motionSensitivity={settings.motionSensitivity}
           elevationSmoothing={settings.elevationSmoothing}

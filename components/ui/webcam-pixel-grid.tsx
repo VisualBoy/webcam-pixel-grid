@@ -166,15 +166,13 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     height: number
   ) => {
     ctx.save();
-
-    // Create an additive blending stack to simulate light bleed
     ctx.globalCompositeOperation = "lighter";
 
-    // First pass: Wide, soft bloom for ambient glow
+    // First pass
     ctx.filter = "blur(" + bloomRadius * 2 + "px) brightness(" + (bloomIntensity * 0.6) + ") contrast(1.1)";
     ctx.drawImage(canvas, 0, 0, width, height);
 
-    // Second pass: Tighter, more intense bloom for highlights
+    // Second pass
     ctx.filter = "blur(" + bloomRadius + "px) brightness(" + bloomIntensity + ")";
     ctx.drawImage(canvas, 0, 0, width, height);
 
@@ -325,7 +323,6 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     const offsetXGrid = (displayWidth - gridWidth) / 2;
     const offsetYGrid = (displayHeight - gridHeight) / 2;
 
-    //renderGlow(processingCanvas, dispCtx);
 
     // Draw cells with 3D effect
     for (let row = 0; row < gridRows; row++) {
@@ -388,19 +385,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
           dispCtx.closePath();
           dispCtx.fill();
         }
-        /*
-                // 1. Calculate glow intensity based on elevation
-                const glowThreshold = 10; // Start glowing only after this elevation
-                const glowIntensity = Math.max(0, elevation - glowThreshold);
-        
-                if (glowIntensity > 0) {
-                  // 2. Set shadow properties for the glow effect
-                  // We use the pixel's own color for the glow to make it look natural
-                  dispCtx.shadowBlur = glowIntensity * 5.5; // Scale the blur radius
-                  dispCtx.shadowColor = `rgba(${pixel.r}, ${pixel.g}, ${pixel.b}, 1)`;
-                }
-        */
-        // 3. Draw top face (main cell)
+
+
         const brightness = 1 + elevation * 0.05;
         dispCtx.fillStyle = `rgb(${Math.min(255, Math.round(pixel.r * brightness))}, ${Math.min(255, Math.round(pixel.g * brightness))}, ${Math.min(255, Math.round(pixel.b * brightness))})`;
 
@@ -410,14 +396,6 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
           cellSize - gap,
           cellSize - gap,
         );
-
-
-
-
-        // 4. IMPORTANT: Reset shadow properties immediately
-        // This prevents the glow from being applied to the stroke or subsequent cells
-        dispCtx.shadowBlur = 0;
-        dispCtx.shadowColor = "transparent";
 
         // Draw light border around top face
         dispCtx.strokeStyle = `rgba(${borderRGB.r}, ${borderRGB.g}, ${borderRGB.b}, ${borderOpacity + elevation * 0.008})`;
