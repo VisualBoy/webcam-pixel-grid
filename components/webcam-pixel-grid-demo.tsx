@@ -42,7 +42,7 @@ export default function WebcamPixelGridDemo() {
 
           {/* Title */}
           <h1 className="mb-6 text-xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl">
-            Ship stunning landing pages faster.
+            Webcam Pixel Grid
           </h1>
 
           {/* Description */}
@@ -68,15 +68,15 @@ export default function WebcamPixelGridDemo() {
                 />
               </svg>
             </button>
-            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30">
-              View Documentation
-            </button>
-          </div>
+            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30" onClick={open(https://ui.aceternity.com/components/webcam-pixel-grid)}  >
+            View Doc
+          </button>
         </div>
-
-        {/* Scroll indicator */}
-
       </div>
+
+      {/* Scroll indicator */}
+
     </div>
+    </div >
   );
 }

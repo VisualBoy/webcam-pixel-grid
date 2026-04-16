@@ -1,5 +1,4 @@
 import WebcamPixelGridDemo from '@/components/webcam-pixel-grid-demo'
-import Component from '@/components/webcam-pixel-grid-demo'
 
 export default function Page() {
   return (

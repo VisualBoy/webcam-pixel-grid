@@ -153,6 +153,23 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     };
   }, [requestCameraAccess]);
 
+  const renderGlow = (
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+  ) => {
+    ctx.save();
+    ctx.filter = "blur(8px) brightness(200%)";
+    ctx.globalCompositeOperation = "lighter";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+
+    ctx.save();
+    ctx.filter = "blur(4px) brightness(200%)";
+    ctx.globalCompositeOperation = "lighter";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+  };
+
   // Main render loop
   const render = useCallback(() => {
     const video = videoRef.current;
@@ -160,6 +177,9 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     const displayCanvas = displayCanvasRef.current;
 
     if (!video || !processingCanvas || !displayCanvas || video.readyState < 2) {
+
+      renderGlow(procCtx, dispCtx);
+
       animationRef.current = requestAnimationFrame(render);
       return;
     }
@@ -168,6 +188,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
       willReadFrequently: true,
     });
     const dispCtx = displayCanvas.getContext("2d");
+
+
 
     if (!procCtx || !dispCtx) {
       animationRef.current = requestAnimationFrame(render);
@@ -258,6 +280,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
           (pixel.targetElevation - pixel.currentElevation) * elevationSmoothing;
       }
     }
+
+
 
     // Store current frame for next comparison
     previousFrameRef.current = new Uint8ClampedArray(currentData);
