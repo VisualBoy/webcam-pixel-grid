@@ -5,7 +5,7 @@ import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid"
 import { SettingsSidebar, type GridSettings } from "@/components/settings-sidebar"
 
 const DEFAULT_SETTINGS: GridSettings = {
-  maxElevation: 80,
+  maxElevation: 60,
   motionSensitivity: 0.8,
   elevationSmoothing: 0.1,
   gapRatio: 0.1,
@@ -23,8 +23,8 @@ export default function WebcamPixelGridDemo() {
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid
-          gridCols={16}
-          gridRows={9}
+          gridCols={32}
+          gridRows={18}
           maxElevation={settings.maxElevation}
           motionSensitivity={settings.motionSensitivity}
           elevationSmoothing={settings.elevationSmoothing}
@@ -52,7 +52,7 @@ export default function WebcamPixelGridDemo() {
         <div className="max-w-4xl text-center">
           {/* Badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-white/70 backdrop-blur-sm">
-            {"Introducing AI SaaS Template \u2192"}
+            {"VisualBoy/webcam-pixel-grid \u2192"}
           </div>
 
           {/* Title */}
@@ -62,20 +62,19 @@ export default function WebcamPixelGridDemo() {
 
           {/* Description */}
           <p className="mx-auto mb-10 max-w-2xl text-base text-white/60 sm:text-xl">
-            Build amazing landing pages with component blocks and templates from aceternity, without having to worry
-            about styling and animations.
+            3D pixel grid effect for webcam with glowing bloom FX.
           </p>
 
           {/* Buttons */}
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <button className="group relative inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-8 text-base font-medium text-black transition-all hover:scale-105 hover:bg-white/90">
-              Get Started
+              <a href="https://github.com/VisualBoy/webcam-pixel-grid" target="_blank" > GitHub </a>
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </button>
             <button className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 text-base font-medium text-white backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/10">
-              View Doc
+              <a href="https://ui.aceternity.com/components/webcam-pixel-grid" target="_blank" > View Doc </a>
             </button>
           </div>
         </div>
