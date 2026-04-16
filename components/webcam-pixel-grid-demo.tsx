@@ -1,3 +1,5 @@
+"use client";
+
 import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid";
 
 export default function WebcamPixelGridDemo() {
