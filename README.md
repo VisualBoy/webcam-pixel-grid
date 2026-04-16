@@ -2,6 +2,9 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
 
+
+<img width="1692" height="895" alt="Screenshot 2026-04-17 000741" src="https://github.com/user-attachments/assets/a26a4665-1077-4246-88ca-54cb27d26042" />
+
 ## Built with v0
 
 This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
