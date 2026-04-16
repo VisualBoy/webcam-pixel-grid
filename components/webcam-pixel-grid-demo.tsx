@@ -10,19 +10,21 @@ export default function WebcamPixelGridDemo() {
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid
-          gridCols={80}
-          gridRows={56}
-          maxElevation={50}
-          motionSensitivity={0.45}
-          elevationSmoothing={0.2}
+          gridCols={32}
+          gridRows={20}
+          maxElevation={80}
+          motionSensitivity={0.8}
+          elevationSmoothing={0.1}
           colorMode="webcam"
           backgroundColor="#030303"
-          mirror={true}
+          mirror={false}
           gapRatio={0.05}
           invertColors={false}
           darken={0.3}
-          borderColor="#ffffff"
-          borderOpacity={0.06}
+          borderColor="#008B8B"
+          borderOpacity={0.5}
+          bloomIntensity={0.6}
+          bloomRadius={6}
           className="w-full h-full"
           onWebcamReady={() => console.log("Webcam ready!")}
           onWebcamError={(err) => console.error("Webcam error:", err)}
@@ -68,15 +70,15 @@ export default function WebcamPixelGridDemo() {
                 />
               </svg>
             </button>
-            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30" onClick={open(https://ui.aceternity.com/components/webcam-pixel-grid)}  >
-            View Doc
-          </button>
+            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"  >
+              View Doc
+            </button>
+          </div>
         </div>
+
+        {/* Scroll indicator */}
+
       </div>
-
-      {/* Scroll indicator */}
-
-    </div>
     </div >
   );
 }

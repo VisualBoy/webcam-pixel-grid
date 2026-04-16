@@ -31,6 +31,10 @@ type WebcamPixelGridProps = {
   borderColor?: string;
   /** Border opacity (0-1) */
   borderOpacity?: number;
+  /** Bloom intensity */
+  bloomIntensity?: number;
+  /** Bloom radius */
+  bloomRadius?: number;
   /** Additional class name */
   className?: string;
   /** Callback when webcam access is denied */
@@ -63,6 +67,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
   darken = 0,
   borderColor = "#ffffff",
   borderOpacity = 0.08,
+  bloomIntensity = 0.4,
+  bloomRadius = 6,
   className,
   onWebcamError,
   onWebcamReady,
@@ -153,22 +159,27 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     };
   }, [requestCameraAccess]);
 
-  const renderGlow = (
-    canvas: HTMLCanvasElement,
+  const applyGlobalBloom = useCallback((
     ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    width: number,
+    height: number
   ) => {
     ctx.save();
-    ctx.filter = "blur(8px) brightness(200%)";
-    ctx.globalCompositeOperation = "lighter";
-    ctx.drawImage(canvas, 0, 0);
-    ctx.restore();
 
-    ctx.save();
-    ctx.filter = "blur(4px) brightness(200%)";
+    // Create an additive blending stack to simulate light bleed
     ctx.globalCompositeOperation = "lighter";
-    ctx.drawImage(canvas, 0, 0);
+
+    // First pass: Wide, soft bloom for ambient glow
+    ctx.filter = "blur(" + bloomRadius * 2 + "px) brightness(" + (bloomIntensity * 0.6) + ") contrast(1.1)";
+    ctx.drawImage(canvas, 0, 0, width, height);
+
+    // Second pass: Tighter, more intense bloom for highlights
+    ctx.filter = "blur(" + bloomRadius + "px) brightness(" + bloomIntensity + ")";
+    ctx.drawImage(canvas, 0, 0, width, height);
+
     ctx.restore();
-  };
+  }, []);
 
   // Main render loop
   const render = useCallback(() => {
@@ -178,7 +189,7 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
 
     if (!video || !processingCanvas || !displayCanvas || video.readyState < 2) {
 
-      renderGlow(procCtx, dispCtx);
+
 
       animationRef.current = requestAnimationFrame(render);
       return;
@@ -209,6 +220,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
       procCtx.drawImage(video, 0, 0, gridCols, gridRows);
     }
     procCtx.restore();
+
+
 
     // Get pixel data
     const imageData = procCtx.getImageData(0, 0, gridCols, gridRows);
@@ -312,6 +325,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     const offsetXGrid = (displayWidth - gridWidth) / 2;
     const offsetYGrid = (displayHeight - gridHeight) / 2;
 
+    //renderGlow(processingCanvas, dispCtx);
+
     // Draw cells with 3D effect
     for (let row = 0; row < gridRows; row++) {
       for (let col = 0; col < gridCols; col++) {
@@ -355,6 +370,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
           dispCtx.closePath();
           dispCtx.fill();
 
+
+
           // Bottom side
           dispCtx.fillStyle = `rgb(${Math.max(0, pixel.r - 50)}, ${Math.max(0, pixel.g - 50)}, ${Math.max(0, pixel.b - 50)})`;
           dispCtx.beginPath();
@@ -371,16 +388,36 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
           dispCtx.closePath();
           dispCtx.fill();
         }
-
-        // Draw top face (main cell) - brighter when elevated
+        /*
+                // 1. Calculate glow intensity based on elevation
+                const glowThreshold = 10; // Start glowing only after this elevation
+                const glowIntensity = Math.max(0, elevation - glowThreshold);
+        
+                if (glowIntensity > 0) {
+                  // 2. Set shadow properties for the glow effect
+                  // We use the pixel's own color for the glow to make it look natural
+                  dispCtx.shadowBlur = glowIntensity * 5.5; // Scale the blur radius
+                  dispCtx.shadowColor = `rgba(${pixel.r}, ${pixel.g}, ${pixel.b}, 1)`;
+                }
+        */
+        // 3. Draw top face (main cell)
         const brightness = 1 + elevation * 0.05;
         dispCtx.fillStyle = `rgb(${Math.min(255, Math.round(pixel.r * brightness))}, ${Math.min(255, Math.round(pixel.g * brightness))}, ${Math.min(255, Math.round(pixel.b * brightness))})`;
+
         dispCtx.fillRect(
           x + gap / 2 + offsetX,
           y + gap / 2 + offsetY,
           cellSize - gap,
           cellSize - gap,
         );
+
+
+
+
+        // 4. IMPORTANT: Reset shadow properties immediately
+        // This prevents the glow from being applied to the stroke or subsequent cells
+        dispCtx.shadowBlur = 0;
+        dispCtx.shadowColor = "transparent";
 
         // Draw light border around top face
         dispCtx.strokeStyle = `rgba(${borderRGB.r}, ${borderRGB.g}, ${borderRGB.b}, ${borderOpacity + elevation * 0.008})`;
@@ -391,8 +428,13 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
           cellSize - gap,
           cellSize - gap,
         );
+
+
       }
     }
+
+    // Apply post-processing bloom effect
+    applyGlobalBloom(dispCtx, displayCanvas, displayWidth, displayHeight);
 
     animationRef.current = requestAnimationFrame(render);
   }, [
@@ -408,6 +450,7 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     gapRatio,
     invertColors,
     darken,
+    applyGlobalBloom,
     borderRGB,
     borderOpacity,
   ]);
