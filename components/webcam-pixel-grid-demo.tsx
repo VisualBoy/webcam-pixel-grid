@@ -5,22 +5,22 @@ import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid";
 export default function WebcamPixelGridDemo() {
   return (
     <div className="relative h-screen w-screen bg-black overflow-hidden">
-     
+
 
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid
-          gridCols={60}
-          gridRows={40}
+          gridCols={80}
+          gridRows={56}
           maxElevation={50}
-          motionSensitivity={0.25}
+          motionSensitivity={0.45}
           elevationSmoothing={0.2}
           colorMode="webcam"
           backgroundColor="#030303"
           mirror={true}
           gapRatio={0.05}
           invertColors={false}
-          darken={0.6}
+          darken={0.3}
           borderColor="#ffffff"
           borderOpacity={0.06}
           className="w-full h-full"
@@ -42,7 +42,7 @@ export default function WebcamPixelGridDemo() {
 
           {/* Title */}
           <h1 className="mb-6 text-xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl">
-          Ship stunning landing pages faster.
+            Ship stunning landing pages faster.
           </h1>
 
           {/* Description */}
@@ -75,7 +75,7 @@ export default function WebcamPixelGridDemo() {
         </div>
 
         {/* Scroll indicator */}
-        
+
       </div>
     </div>
   );
