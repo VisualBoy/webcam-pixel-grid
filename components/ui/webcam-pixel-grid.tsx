@@ -453,6 +453,8 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     applyGlobalBloom,
     borderRGB,
     borderOpacity,
+    bloomIntensity,
+    bloomRadius
   ]);
 
   // Start render loop when ready
