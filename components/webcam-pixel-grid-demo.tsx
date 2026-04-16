@@ -5,12 +5,12 @@ import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid"
 import { SettingsSidebar, type GridSettings } from "@/components/settings-sidebar"
 
 const DEFAULT_SETTINGS: GridSettings = {
-  maxElevation: 60,
+  maxElevation: 80,
   motionSensitivity: 0.8,
-  elevationSmoothing: 0.1,
-  gapRatio: 0.1,
-  borderColor: "#008B8B",
-  borderOpacity: 0.5,
+  elevationSmoothing: 0.28,
+  gapRatio: 0.05,
+  borderColor: "#01fefe",
+  borderOpacity: 0.2,
   bloomIntensity: 0.6,
   bloomRadius: 6,
 }
@@ -33,7 +33,7 @@ export default function WebcamPixelGridDemo() {
           mirror={false}
           gapRatio={settings.gapRatio}
           invertColors={false}
-          darken={0.3}
+          darken={0.5}
           borderColor={settings.borderColor}
           borderOpacity={settings.borderOpacity}
           bloomIntensity={settings.bloomIntensity}
