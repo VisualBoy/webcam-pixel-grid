@@ -4,6 +4,7 @@ import { useState } from "react"
 import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid"
 import { SettingsSidebar, type GridSettings } from "@/components/settings-sidebar"
 import { CameraPicker } from "@/components/camera-picker"
+import { InlineEditable } from "@/components/inline-editable"
 
 const DEFAULT_SETTINGS: GridSettings = {
   maxElevation: 80,
@@ -19,6 +20,8 @@ const DEFAULT_SETTINGS: GridSettings = {
 export default function WebcamPixelGridDemo() {
   const [settings, setSettings] = useState<GridSettings>(DEFAULT_SETTINGS)
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | undefined>(undefined)
+  const [title, setTitle] = useState("Webcam Pixel Grid")
+  const [subtitle, setSubtitle] = useState("3D pixel grid effect for webcam with glowing bloom FX.")
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
@@ -60,12 +63,24 @@ export default function WebcamPixelGridDemo() {
 
           {/* Title */}
           <h1 className="mb-6 text-xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl">
-            Webcam Pixel Grid
+            <InlineEditable
+              as="span"
+              value={title}
+              onChange={setTitle}
+              placeholder="Enter title"
+              className="block text-xl font-bold tracking-tight text-white sm:text-6xl md:text-8xl"
+            />
           </h1>
 
           {/* Description */}
           <p className="mx-auto mb-10 max-w-2xl text-base text-white/60 sm:text-xl">
-            3D pixel grid effect for webcam with glowing bloom FX.
+            <InlineEditable
+              as="span"
+              value={subtitle}
+              onChange={setSubtitle}
+              placeholder="Enter subtitle"
+              className="text-base text-white/60 sm:text-xl"
+            />
           </p>
 
           {/* Buttons */}
