@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid"
 import { SettingsSidebar, type GridSettings } from "@/components/settings-sidebar"
-import { CameraPicker } from "@/components/camera-picker"
+import { SourcePicker, type CaptureSource } from "@/components/source-picker"
 import { InlineEditable } from "@/components/inline-editable"
 import { useGridResolution } from "@/hooks/use-grid-resolution"
 
@@ -21,6 +21,7 @@ const DEFAULT_SETTINGS: GridSettings = {
 export default function WebcamPixelGridDemo() {
   const [settings, setSettings] = useState<GridSettings>(DEFAULT_SETTINGS)
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | undefined>(undefined)
+  const [captureSource, setCaptureSource] = useState<CaptureSource>("webcam")
   const [title, setTitle] = useState("Webcam Pixel Grid")
   const [subtitle, setSubtitle] = useState("3D pixel grid effect for webcam with glowing bloom FX.")
 
@@ -39,7 +40,7 @@ export default function WebcamPixelGridDemo() {
           elevationSmoothing={settings.elevationSmoothing}
           colorMode="webcam"
           backgroundColor="#030303"
-          mirror={false}
+          mirror={captureSource === "webcam"}
           gapRatio={settings.gapRatio}
           invertColors={false}
           darken={0.5}
@@ -48,9 +49,10 @@ export default function WebcamPixelGridDemo() {
           bloomIntensity={settings.bloomIntensity}
           bloomRadius={settings.bloomRadius}
           deviceId={selectedDeviceId}
+          captureMode={captureSource}
           className="h-full w-full"
-          onWebcamReady={() => console.log("[v0] Webcam ready!")}
-          onWebcamError={(err) => console.error("[v0] Webcam error:", err)}
+          onWebcamReady={() => console.log("[v0] Capture ready!")}
+          onWebcamError={(err) => console.error("[v0] Capture error:", err)}
         />
       </div>
 
@@ -107,8 +109,13 @@ export default function WebcamPixelGridDemo() {
       {/* Settings sidebar */}
       <SettingsSidebar settings={settings} onChange={setSettings} defaults={DEFAULT_SETTINGS} />
 
-      {/* Camera picker */}
-      <CameraPicker selectedDeviceId={selectedDeviceId} onDeviceChange={setSelectedDeviceId} />
+      {/* Source picker (webcam or screen) */}
+      <SourcePicker 
+        captureSource={captureSource}
+        onCaptureSourceChange={setCaptureSource}
+        selectedDeviceId={selectedDeviceId} 
+        onDeviceChange={setSelectedDeviceId}
+      />
     </div>
   )
 }

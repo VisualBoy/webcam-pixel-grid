@@ -39,6 +39,8 @@ type WebcamPixelGridProps = {
   className?: string;
   /** Specific device ID to use (for switching cameras) */
   deviceId?: string;
+  /** Capture mode: 'webcam' for camera, 'screen' for screen/window capture */
+  captureMode?: "webcam" | "screen";
   /** Callback when webcam access is denied */
   onWebcamError?: (error: Error) => void;
   /** Callback when webcam is ready */
@@ -73,6 +75,7 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
   bloomRadius = 6,
   className,
   deviceId,
+  captureMode = "webcam",
   onWebcamError,
   onWebcamReady,
 }) => {
@@ -122,6 +125,46 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
 
   const streamRef = useRef<MediaStream | null>(null);
 
+  // Request screen capture
+  const requestScreenCapture = useCallback(async () => {
+    try {
+      // Stop existing stream if any
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          cursor: "always",
+        },
+        audio: false,
+      });
+
+      streamRef.current = stream;
+
+      // Handle when user stops sharing via browser UI
+      stream.getVideoTracks()[0].onended = () => {
+        setIsReady(false);
+        setError("Screen sharing stopped");
+        onWebcamError?.(new Error("Screen sharing stopped"));
+      };
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+        setIsReady(true);
+        setError(null);
+        setShowErrorPopup(false);
+        onWebcamReady?.();
+      }
+    } catch (err) {
+      const error =
+        err instanceof Error ? err : new Error("Screen capture denied");
+      setError(error.message);
+      onWebcamError?.(error);
+    }
+  }, [onWebcamError, onWebcamReady]);
+
   // Request camera access
   const requestCameraAccess = useCallback(async () => {
     try {
@@ -164,16 +207,21 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
     }
   }, [deviceId, onWebcamError, onWebcamReady]);
 
-  // Initialize webcam on mount
+  // Initialize capture on mount or mode change
   useEffect(() => {
-    requestCameraAccess();
+    if (captureMode === "screen") {
+      // For screen capture, request it directly
+      requestScreenCapture();
+    } else {
+      requestCameraAccess();
+    }
 
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [requestCameraAccess]);
+  }, [captureMode, requestCameraAccess, requestScreenCapture]);
 
   const applyGlobalBloom = useCallback((
     ctx: CanvasRenderingContext2D,
@@ -532,13 +580,15 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
             {/* Content */}
             <div className="flex-1 pr-4">
               <p className="text-sm font-medium text-white/90">
-                Camera access needed
+                {captureMode === "screen" ? "Screen capture needed" : "Camera access needed"}
               </p>
               <p className="mt-1 text-xs text-white/50">
-                Enable camera for the interactive background effect
+                {captureMode === "screen" 
+                  ? "Select a window or screen for the interactive background effect"
+                  : "Enable camera for the interactive background effect"}
               </p>
               <button
-                onClick={requestCameraAccess}
+                onClick={captureMode === "screen" ? requestScreenCapture : requestCameraAccess}
                 className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-white/20"
               >
                 <svg
@@ -554,7 +604,7 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
                     d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                   />
                 </svg>
-                Enable Camera
+                {captureMode === "screen" ? "Select Screen" : "Enable Camera"}
               </button>
             </div>
           </div>
