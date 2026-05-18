@@ -23,8 +23,8 @@ export default function WebcamPixelGridDemo() {
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid
-          gridCols={32}
-          gridRows={18}
+          gridCols={24}
+          gridRows={12}
           maxElevation={settings.maxElevation}
           motionSensitivity={settings.motionSensitivity}
           elevationSmoothing={settings.elevationSmoothing}
