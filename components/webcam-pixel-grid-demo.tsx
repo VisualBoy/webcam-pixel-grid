@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid"
 import { SettingsSidebar, type GridSettings } from "@/components/settings-sidebar"
+import { CameraPicker } from "@/components/camera-picker"
 
 const DEFAULT_SETTINGS: GridSettings = {
   maxElevation: 80,
@@ -17,6 +18,7 @@ const DEFAULT_SETTINGS: GridSettings = {
 
 export default function WebcamPixelGridDemo() {
   const [settings, setSettings] = useState<GridSettings>(DEFAULT_SETTINGS)
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | undefined>(undefined)
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
@@ -38,6 +40,7 @@ export default function WebcamPixelGridDemo() {
           borderOpacity={settings.borderOpacity}
           bloomIntensity={settings.bloomIntensity}
           bloomRadius={settings.bloomRadius}
+          deviceId={selectedDeviceId}
           className="h-full w-full"
           onWebcamReady={() => console.log("[v0] Webcam ready!")}
           onWebcamError={(err) => console.error("[v0] Webcam error:", err)}
@@ -82,6 +85,9 @@ export default function WebcamPixelGridDemo() {
 
       {/* Settings sidebar */}
       <SettingsSidebar settings={settings} onChange={setSettings} defaults={DEFAULT_SETTINGS} />
+
+      {/* Camera picker */}
+      <CameraPicker selectedDeviceId={selectedDeviceId} onDeviceChange={setSelectedDeviceId} />
     </div>
   )
 }

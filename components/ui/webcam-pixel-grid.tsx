@@ -37,6 +37,8 @@ type WebcamPixelGridProps = {
   bloomRadius?: number;
   /** Additional class name */
   className?: string;
+  /** Specific device ID to use (for switching cameras) */
+  deviceId?: string;
   /** Callback when webcam access is denied */
   onWebcamError?: (error: Error) => void;
   /** Callback when webcam is ready */
@@ -70,6 +72,7 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
   bloomIntensity = 0.4,
   bloomRadius = 6,
   className,
+  deviceId,
   onWebcamError,
   onWebcamReady,
 }) => {
@@ -122,13 +125,26 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
   // Request camera access
   const requestCameraAccess = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 640 },
-          height: { ideal: 480 },
-          facingMode: "user",
-        },
-      });
+      // Stop existing stream if any
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+
+      const constraints: MediaStreamConstraints = {
+        video: deviceId
+          ? {
+              deviceId: { exact: deviceId },
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+            }
+          : {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+              facingMode: "user",
+            },
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
       streamRef.current = stream;
 
@@ -146,7 +162,7 @@ export const WebcamPixelGrid: React.FC<WebcamPixelGridProps> = ({
       setError(error.message);
       onWebcamError?.(error);
     }
-  }, [onWebcamError, onWebcamReady]);
+  }, [deviceId, onWebcamError, onWebcamReady]);
 
   // Initialize webcam on mount
   useEffect(() => {
