@@ -11,20 +11,16 @@ import type { Viewport } from 'next'
 export const metadata: Metadata = {
   title: 'Webcam Pixel Grid',
   description: '3D pixel grid effect for webcam with glowing bloom FX.',
-  generator: 'v0.app',
+  generator: 'WebcamPixelGrid',
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
+        url: '/favicon-32x32.png',
         media: '(prefers-color-scheme: light)',
       },
       {
-        url: '/icon-dark-32x32.png',
+        url: '/favicon-32x32.png',
         media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
       },
     ],
     apple: '/apple-icon.png',

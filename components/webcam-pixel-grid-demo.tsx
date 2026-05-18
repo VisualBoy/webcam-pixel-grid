@@ -23,7 +23,7 @@ export default function WebcamPixelGridDemo() {
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | undefined>(undefined)
   const [title, setTitle] = useState("Webcam Pixel Grid")
   const [subtitle, setSubtitle] = useState("3D pixel grid effect for webcam with glowing bloom FX.")
-  
+
   // Dynamic grid resolution based on orientation
   const { cols, rows } = useGridResolution(24)
 
@@ -90,7 +90,7 @@ export default function WebcamPixelGridDemo() {
           {/* Buttons */}
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
 
-            <a href="https://github.com/VisualBoy/webcam-pixel-grid" target="_blank" rel="noreferrer" className="group relative inline-flex h-9 px-4 text-sm sm:h-12 sm:px-8 sm:text-base items-center justify-center gap-2 rounded-full bg-white font-medium text-black transition-all hover:scale-105 hover:bg-white/90 md:opacity-0 md:group-hover/container:opacity-100">GitHub
+            <a href="https://github.com/VisualBoy/webcam-pixel-grid" target="_blank" rel="noreferrer" className="group relative inline-flex h-9 px-4 text-sm sm:h-12 sm:px-8 sm:text-base items-center justify-center gap-2 rounded-full bg-white font-medium text-black transition-all hover:scale-105 hover:bg-white/70 md:opacity-0 md:group-hover/container:opacity-100">GitHub
               <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
