@@ -5,6 +5,7 @@ import { WebcamPixelGrid } from "@/components/ui/webcam-pixel-grid"
 import { SettingsSidebar, type GridSettings } from "@/components/settings-sidebar"
 import { CameraPicker } from "@/components/camera-picker"
 import { InlineEditable } from "@/components/inline-editable"
+import { useGridResolution } from "@/hooks/use-grid-resolution"
 
 const DEFAULT_SETTINGS: GridSettings = {
   maxElevation: 80,
@@ -22,14 +23,17 @@ export default function WebcamPixelGridDemo() {
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | undefined>(undefined)
   const [title, setTitle] = useState("Webcam Pixel Grid")
   const [subtitle, setSubtitle] = useState("3D pixel grid effect for webcam with glowing bloom FX.")
+  
+  // Dynamic grid resolution based on orientation
+  const { cols, rows } = useGridResolution(24)
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
       {/* Webcam pixel grid background */}
       <div className="absolute inset-0">
         <WebcamPixelGrid
-          gridCols={24}
-          gridRows={12}
+          gridCols={cols}
+          gridRows={rows}
           maxElevation={settings.maxElevation}
           motionSensitivity={settings.motionSensitivity}
           elevationSmoothing={settings.elevationSmoothing}
